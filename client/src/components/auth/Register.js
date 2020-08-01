@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alerts';
 import axios from 'axios';
 
-const Register = () => {
+const Register = (props) => {
     const [formData, setFormData] = useState({
         name:'',
         email: '',
@@ -13,11 +16,12 @@ const Register = () => {
 
     const onChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
 
-    const onSubmit = async (e) => {
-        e.preventDefult();
+    const onSubmit = async e => {
+
+        e.preventDefault();
 
         if(password !== password2) {
-            console.log('Passwords do not match');
+            props.setAlert('Passwords do not match');
         } else{
             const newUser = {
                 name,
@@ -28,11 +32,12 @@ const Register = () => {
             try{
                 const config = {
                     headers: {
-                        'Content-Type': 'applicatin/json'
+                        'Content-Type': 'application/json'
                     }
                 };
 
                 const body = JSON.stringify(newUser);
+                console.log(body);
 
                 const res = await axios.post('/api/users', body, config);
                 console.log(res.data);
@@ -41,13 +46,15 @@ const Register = () => {
             }
         }
 
+        return false;
+
     };
 
     return (
         <Fragment>
            <h1 className="large text-primary">Sign Up</h1>
             <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
-            <form className="form" onSubmit={e => onSubmit(e)}>
+            <form className="form" onSubmit={ onSubmit }>
                 <div className="form-group">
                 <input type="text" placeholder="Name" name="name" value={ name } required onChange={ onChange } />
                 </div>
@@ -85,6 +92,10 @@ const Register = () => {
             </p>
         </Fragment>
     )
-}
+};
 
-export default Register;
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired
+};
+
+export default connect(null, {setAlert})(Register);
