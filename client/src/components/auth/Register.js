@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alerts';
+import { register } from '../../actions/auth';
 import axios from 'axios';
 
 const Register = (props) => {
@@ -23,27 +24,7 @@ const Register = (props) => {
         if(password !== password2) {
             props.setAlert('Passwords do not match');
         } else{
-            const newUser = {
-                name,
-                email,
-                password
-            };
-
-            try{
-                const config = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-
-                const body = JSON.stringify(newUser);
-                console.log(body);
-
-                const res = await axios.post('/api/users', body, config);
-                console.log(res.data);
-            } catch(err) {
-                console.log(err.response.data);
-            }
+            register({ name, email, password });
         }
 
         return false;
@@ -95,7 +76,8 @@ const Register = (props) => {
 };
 
 Register.propTypes = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
 };
 
-export default connect(null, {setAlert})(Register);
+export default connect(null, {setAlert, register})(Register);
