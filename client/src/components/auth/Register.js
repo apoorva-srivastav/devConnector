@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alerts';
 import { register } from '../../actions/auth';
-import axios from 'axios';
 
 const Register = (props) => {
     const [formData, setFormData] = useState({
@@ -24,7 +23,8 @@ const Register = (props) => {
         if(password !== password2) {
             props.setAlert('Passwords do not match');
         } else{
-            register({ name, email, password });
+            
+            props.register({ name, email, password });
         }
 
         return false;
