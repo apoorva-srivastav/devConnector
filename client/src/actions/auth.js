@@ -6,7 +6,7 @@ import axios from 'axios';
 import setAuthToken from "../utils/setAuthTokens";
 
 //load User
-export const loadUser = ({}) => async dispatch => {
+export const loadUser = () => async dispatch => {
     if(localStorage.token) {
         setAuthToken(localStorage.token);
     }
